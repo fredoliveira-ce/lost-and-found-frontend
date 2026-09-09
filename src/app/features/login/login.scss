@@ -1,0 +1,71 @@
+.lf-login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 2rem 1rem;
+}
+
+.lf-login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lf-login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.lf-login-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--lf-radius-control);
+  background: var(--mat-sys-primary-fixed);
+  color: var(--mat-sys-on-primary-fixed-variant);
+}
+
+.lf-login-brand-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+
+  em {
+    font-style: normal;
+    color: var(--mat-sys-primary);
+  }
+}
+
+.lf-login-heading {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  text-align: center;
+  margin: 0;
+}
+
+.lf-login-subheading {
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 1.5rem;
+}
+
+.lf-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lf-login-submit {
+  height: 44px;
+  margin-top: 0.5rem;
+}

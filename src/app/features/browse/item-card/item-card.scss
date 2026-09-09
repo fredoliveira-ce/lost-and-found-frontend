@@ -1,0 +1,80 @@
+.lf-item-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-color: var(--mat-sys-outline-variant) !important;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(18, 28, 42, 0.08);
+  }
+}
+
+.lf-item-thumb {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-outline);
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.lf-item-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lf-item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.lf-item-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.lf-item-qty-chip {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: var(--lf-radius-control);
+  background: var(--mat-sys-primary-fixed);
+  color: var(--mat-sys-on-primary-fixed-variant);
+  white-space: nowrap;
+}
+
+.lf-item-place {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.lf-claim-button {
+  margin-top: 0.5rem;
+  width: 100%;
+}

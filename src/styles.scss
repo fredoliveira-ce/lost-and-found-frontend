@@ -1,1 +1,109 @@
-/* You can add global styles to this file, and also import other style files */
+// Base M3 theme (palette choice mostly irrelevant below - every color role is
+// overridden explicitly with the Lost & Found brand palette from the Stitch
+// mockups). Typography families match the mockups: Plus Jakarta Sans for
+// headings, Inter for body/UI text.
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: (
+        plain-family: 'Inter, sans-serif',
+        brand-family: 'Plus Jakarta Sans, sans-serif',
+        bold-weight: 700,
+        medium-weight: 600,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
+  // Lost & Found brand palette, taken directly from the Stitch mockups
+  // (verified against the actual rendered HTML, not just the design doc).
+  // These are Material 3 system color roles - overriding them here is the
+  // documented way to fully customize a theme beyond the built-in palettes.
+  // https://material.angular.dev/guide/system-variables
+  --mat-sys-surface: #f8f9ff;
+  --mat-sys-surface-dim: #d0dbed;
+  --mat-sys-surface-bright: #f8f9ff;
+  --mat-sys-surface-container-lowest: #ffffff;
+  --mat-sys-surface-container-low: #eff4ff;
+  --mat-sys-surface-container: #e6eeff;
+  --mat-sys-surface-container-high: #dee9fc;
+  --mat-sys-surface-container-highest: #d9e3f6;
+  --mat-sys-on-surface: #121c2a;
+  --mat-sys-on-surface-variant: #3d4947;
+  --mat-sys-inverse-surface: #27313f;
+  --mat-sys-inverse-on-surface: #eaf1ff;
+  --mat-sys-outline: #6d7a77;
+  --mat-sys-outline-variant: #bcc9c6;
+  --mat-sys-surface-tint: #006a61;
+  --mat-sys-primary: #00685f;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #008378;
+  --mat-sys-on-primary-container: #f4fffc;
+  --mat-sys-inverse-primary: #6bd8cb;
+  --mat-sys-secondary: #904d00;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: #fe932c;
+  --mat-sys-on-secondary-container: #663500;
+  --mat-sys-tertiary: #006860;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-tertiary-container: #248279;
+  --mat-sys-on-tertiary-container: #f3fffc;
+  --mat-sys-error: #ba1a1a;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #ffdad6;
+  --mat-sys-on-error-container: #93000a;
+  --mat-sys-primary-fixed: #89f5e7;
+  --mat-sys-primary-fixed-dim: #6bd8cb;
+  --mat-sys-on-primary-fixed: #00201d;
+  --mat-sys-on-primary-fixed-variant: #005049;
+  --mat-sys-secondary-fixed: #ffdcc3;
+  --mat-sys-secondary-fixed-dim: #ffb77d;
+  --mat-sys-on-secondary-fixed: #2f1500;
+  --mat-sys-on-secondary-fixed-variant: #6e3900;
+  --mat-sys-tertiary-fixed: #9cf2e8;
+  --mat-sys-tertiary-fixed-dim: #80d5cb;
+  --mat-sys-on-tertiary-fixed: #00201d;
+  --mat-sys-on-tertiary-fixed-variant: #00504a;
+  --mat-sys-background: #f8f9ff;
+  --mat-sys-on-background: #121c2a;
+  --mat-sys-surface-variant: #d9e3f6;
+
+  // Brand-specific tokens not part of Material's system-variable set, used
+  // directly in our own component styles (e.g. the amber "notice" tint).
+  --lf-notice-bg: #fff7ed;
+  --lf-notice-border: #fed7aa;
+  --lf-radius-card: 1rem; // rounded-2xl
+  --lf-radius-control: 0.75rem; // rounded-xl
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mat-mdc-card {
+  border-radius: var(--lf-radius-card) !important;
+}
+
+.mat-mdc-form-field,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  border-radius: var(--lf-radius-control);
+}

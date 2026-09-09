@@ -1,0 +1,84 @@
+<div class="lf-import-page">
+  <h1 class="lf-page-title">
+    <mat-icon>upload_file</mat-icon>
+    Import Found Items
+  </h1>
+  <p class="lf-page-subtitle">
+    Upload a plain-text or CSV inventory log to add found items to the bulletin.
+  </p>
+
+  <div class="lf-import-grid">
+    <mat-card class="lf-dropzone-card" appearance="outlined">
+      <div
+        class="lf-dropzone"
+        [class.lf-dropzone-active]="dragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+      >
+        @if (uploading()) {
+          <mat-spinner diameter="40" />
+          <p>Importing {{ lastFileName() }}&hellip;</p>
+        } @else {
+          <mat-icon class="lf-dropzone-icon">drive_folder_upload</mat-icon>
+          <h3>Drag &amp; drop your inventory file here</h3>
+          <p class="lf-dropzone-hint">Accepts .txt and .csv files</p>
+          <button mat-flat-button color="primary" type="button" (click)="fileInput.click()">
+            Choose File from Disk
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept=".txt,.csv"
+            hidden
+            (change)="onFileSelected($event)"
+          />
+        }
+      </div>
+    </mat-card>
+
+    <mat-card class="lf-format-card" appearance="outlined">
+      <h3>
+        <mat-icon inline>data_object</mat-icon>
+        Expected File Format
+      </h3>
+      <p>Plain text, one block per item:</p>
+      <pre class="lf-format-sample">ItemName: Laptop
+Quantity: 1
+Place: Airport</pre>
+      <p>Or CSV with a header row:</p>
+      <pre class="lf-format-sample">ItemName,Quantity,Place
+Laptop,1,Airport</pre>
+    </mat-card>
+  </div>
+
+  @if (importedItems(); as items) {
+    <mat-card class="lf-preview-card" appearance="outlined">
+      <div class="lf-preview-header">
+        <h3>
+          <mat-icon inline>check_circle</mat-icon>
+          {{ items.length }} item{{ items.length === 1 ? '' : 's' }} imported from
+          {{ lastFileName() }}
+        </h3>
+      </div>
+      <table class="lf-preview-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Place</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+            <tr>
+              <td>{{ item.itemName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.place }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </mat-card>
+  }
+</div>

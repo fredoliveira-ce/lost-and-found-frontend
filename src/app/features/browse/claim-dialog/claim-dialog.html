@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Claim This Item</h2>
+
+<mat-dialog-content class="lf-claim-content">
+  <div class="lf-claim-item-summary">
+    <div class="lf-claim-item-icon">
+      <mat-icon>inventory_2</mat-icon>
+    </div>
+    <div>
+      <div class="lf-claim-item-name">{{ data.item.itemName }}</div>
+      <div class="lf-claim-item-place">
+        <mat-icon inline>location_on</mat-icon>
+        {{ data.item.place }}
+      </div>
+    </div>
+  </div>
+
+  <div class="lf-claim-quantity">
+    <div>
+      <div class="lf-claim-quantity-label">How many are you claiming?</div>
+      <div class="lf-claim-quantity-hint">Min 1, max {{ maxQuantity }} remaining</div>
+    </div>
+    <div class="lf-stepper">
+      <button
+        mat-icon-button
+        type="button"
+        (click)="decrement()"
+        [disabled]="quantity() <= 1"
+        aria-label="Decrease quantity"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+      <span class="lf-stepper-value">{{ quantity() }}</span>
+      <button
+        mat-icon-button
+        type="button"
+        (click)="increment()"
+        [disabled]="quantity() >= maxQuantity"
+        aria-label="Increase quantity"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="submitting()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="confirm()" [disabled]="submitting()">
+    @if (submitting()) {
+      Submitting&hellip;
+    } @else {
+      Confirm &amp; Submit Claim
+    }
+  </button>
+</mat-dialog-actions>

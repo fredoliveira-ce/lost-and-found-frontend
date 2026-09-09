@@ -1,0 +1,71 @@
+<section class="lf-hero">
+  <h1 class="lf-hero-title">Campus Lost &amp; Found Bulletin</h1>
+  <p class="lf-hero-subtitle">
+    All reported items are logged and held securely until claimed.
+  </p>
+
+  <div class="lf-search-panel">
+    <mat-button-toggle-group
+      class="lf-mode-toggle"
+      [value]="mode()"
+      (change)="mode.set($event.value)"
+    >
+      <mat-button-toggle value="search">
+        <mat-icon inline>search</mat-icon>
+        Keyword Search
+      </mat-button-toggle>
+      <mat-button-toggle value="query">
+        <mat-icon inline>psychology</mat-icon>
+        Ask a Question
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <form class="lf-search-form" (ngSubmit)="runSearch()">
+      <mat-form-field appearance="outline" class="lf-search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [(ngModel)]="queryText"
+          name="q"
+          [placeholder]="
+            mode() === 'search'
+              ? 'Search by item name or place...'
+              : 'Ask, e.g. \'black bag lost near the cafeteria last week\''
+          "
+        />
+        @if (queryText) {
+          <button matSuffix mat-icon-button type="button" (click)="clearSearch()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit" class="lf-search-submit">
+        Search
+      </button>
+    </form>
+  </div>
+</section>
+
+<section class="lf-results">
+  <div class="lf-results-header">
+    <h2>Recent Reported Items</h2>
+    <span class="lf-results-count">{{ items().length }} item{{ items().length === 1 ? '' : 's' }}</span>
+  </div>
+
+  @if (loading()) {
+    <div class="lf-loading">
+      <mat-spinner diameter="36" />
+    </div>
+  } @else if (items().length === 0) {
+    <div class="lf-empty">
+      <mat-icon>search_off</mat-icon>
+      <p>No items match your search.</p>
+    </div>
+  } @else {
+    <div class="lf-item-grid">
+      @for (item of items(); track item.id) {
+        <app-item-card [item]="item" (claim)="openClaimDialog(item)" />
+      }
+    </div>
+  }
+</section>

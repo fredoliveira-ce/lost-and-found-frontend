@@ -1,0 +1,41 @@
+<mat-toolbar class="lf-header">
+  <a class="lf-brand" routerLink="/browse">
+    <span class="lf-brand-icon">
+      <mat-icon>search</mat-icon>
+    </span>
+    <span class="lf-brand-text">
+      <span class="lf-brand-title">Lost <em>&amp; Found</em></span>
+      <span class="lf-brand-subtitle">Campus &amp; Office Bulletin</span>
+    </span>
+  </a>
+
+  @if (auth.isAuthenticated()) {
+    <nav class="lf-nav">
+      <a mat-button routerLink="/browse" routerLinkActive="lf-nav-active">Browse Items</a>
+      @if (auth.isAdmin()) {
+        <a mat-button routerLink="/admin/import" routerLinkActive="lf-nav-active">Import Items</a>
+        <a mat-button routerLink="/admin/claims-report" routerLinkActive="lf-nav-active"
+          >Claims Report</a
+        >
+      }
+    </nav>
+
+    <span class="lf-spacer"></span>
+
+    <button mat-button [matMenuTriggerFor]="userMenu" class="lf-user-button">
+      <span class="lf-user-name">{{ auth.username() }}</span>
+      @if (auth.isAdmin()) {
+        <mat-chip class="lf-role-chip">Staff Admin</mat-chip>
+      }
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="signOut()">
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <span class="lf-spacer"></span>
+  }
+</mat-toolbar>

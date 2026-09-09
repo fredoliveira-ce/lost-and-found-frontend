@@ -1,0 +1,31 @@
+<mat-card class="lf-item-card" appearance="outlined">
+  <div class="lf-item-thumb">
+    <mat-icon>inventory_2</mat-icon>
+  </div>
+
+  <div class="lf-item-body">
+    <div class="lf-item-top">
+      <h3 class="lf-item-name">{{ item.itemName }}</h3>
+      <span class="lf-item-qty-chip">{{ item.quantityRemaining }} of {{ item.quantity }} left</span>
+    </div>
+
+    <div class="lf-item-place">
+      <mat-icon inline>location_on</mat-icon>
+      <span>{{ item.place }}</span>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="lf-claim-button"
+      [disabled]="item.quantityRemaining <= 0"
+      (click)="claim.emit()"
+    >
+      @if (item.quantityRemaining > 0) {
+        Claim Item
+      } @else {
+        Fully Claimed
+      }
+    </button>
+  </div>
+</mat-card>

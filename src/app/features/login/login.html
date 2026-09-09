@@ -1,0 +1,53 @@
+<div class="lf-login-page">
+  <mat-card class="lf-login-card">
+    <div class="lf-login-brand">
+      <span class="lf-login-brand-icon">
+        <mat-icon>search</mat-icon>
+      </span>
+      <span class="lf-login-brand-title">Lost <em>&amp; Found</em></span>
+    </div>
+
+    <h1 class="lf-login-heading">Welcome back</h1>
+    <p class="lf-login-subheading">Sign in to browse, search, and claim lost items.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="lf-login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" autocomplete="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hidePassword() ? 'password' : 'text'"
+          autocomplete="current-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword.set(!hidePassword())"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="lf-login-submit"
+        [disabled]="form.invalid || submitting()"
+      >
+        @if (submitting()) {
+          Signing in&hellip;
+        } @else {
+          Sign In
+        }
+      </button>
+    </form>
+  </mat-card>
+</div>

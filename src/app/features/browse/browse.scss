@@ -1,0 +1,91 @@
+.lf-hero {
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    var(--mat-sys-surface-container-low) 0%,
+    var(--mat-sys-surface) 100%
+  );
+}
+
+.lf-hero-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.lf-hero-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 1.5rem;
+}
+
+.lf-search-panel {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--mat-sys-surface-container-lowest);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--lf-radius-card);
+  padding: 1rem;
+  text-align: left;
+}
+
+.lf-mode-toggle {
+  margin-bottom: 0.75rem;
+}
+
+.lf-search-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.lf-search-field {
+  flex: 1 1 auto;
+}
+
+.lf-search-submit {
+  height: 56px;
+  margin-top: 4px;
+}
+
+.lf-results {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.lf-results-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+
+  h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.lf-results-count {
+  color: var(--mat-sys-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.lf-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.lf-loading,
+.lf-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 0;
+  color: var(--mat-sys-on-surface-variant);
+}

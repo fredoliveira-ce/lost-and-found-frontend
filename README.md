@@ -1,59 +1,70 @@
-# LostAndFoundFrontend
+# Lost & Found — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+An Angular Material web app for the [Lost & Found API](../lost-and-found) —
+browse and claim lost items, or (as an admin) import found items and see
+who's claimed what.
 
-## Development server
+This is a separate project from the backend on purpose: different toolchain
+(Node/Angular vs Maven/Spring), different lifecycle. See the backend repo
+for the actual assignment; this is the frontend built on top of it.
 
-To start a local development server, run:
+## Running it
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The backend must already be running on `http://localhost:8081` (see its own
+README). Then:
 
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The app opens on `http://localhost:4200`. In dev, `ng serve` proxies every
+`/api/**` request straight through to the backend (see `proxy.conf.json`),
+so the browser only ever talks to one origin and CORS never comes up.
+
+Log in with any of the seed accounts (same as the backend):
+
+| Username | Password | Role |
+|---|---|---|
+| `alice`, `brian`, `carla` | `password123` | USER |
+| `admin` | `password123` | ADMIN |
 
 ```bash
-ng generate --help
+npm test    # unit tests (Vitest)
 ```
 
-## Building
+## What's here
 
-To build the project run:
+- **Login** — JWT auth against `POST /api/auth/login`.
+- **Browse** — list, fuzzy keyword search, and natural-language query, with
+  a claim dialog (quantity bounded by what's actually left).
+- **Admin: Import** — drag-and-drop upload for `.txt`/`.csv` files.
+- **Admin: Claims report** — every item and who's claimed it.
 
-```bash
-ng build
-```
+Admin screens are hidden and route-guarded for non-admin accounts.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Design
 
-## Running unit tests
+The visual design (colors, typography, card/button shapes) is adapted from
+an AI-generated mockup (Google Stitch), applied as a custom Material 3
+theme in `src/styles.scss`. The mockup also invented some things the real
+API doesn't have — item photos, categories, a multi-step "verify before
+claiming" flow, an editable import preview — those were left out. What you
+see here reflects what the backend can actually do.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Known simplifications (and what production would add)
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Dev-only CORS workaround.** The `ng serve` proxy only works for local
+  development. Deploying this frontend on its own domain would need the
+  backend to add real CORS configuration, or a reverse proxy in front of
+  both.
+- **JWT stored in `localStorage`, no refresh flow.** Fine for a 1-hour demo
+  token; a real app would want httpOnly cookies and refresh tokens.
+- **The admin route guard is UI convenience only.** It just hides pages a
+  non-admin can't use anyway — the backend's `role` check (403) is the real
+  enforcement, and this app never trusts the client-side check for
+  anything security-sensitive.
+- **No end-to-end tests.** Unit tests cover the auth/HTTP core (interceptors,
+  guards, services, claim-quantity bounds); full-page rendering and E2E
+  flows aren't covered, which is proportionate for a demo of this size but
+  wouldn't be for production.

@@ -1,0 +1,58 @@
+<div class="lf-report-page">
+  <h1 class="lf-page-title">
+    <mat-icon>fact_check</mat-icon>
+    Claims Report
+  </h1>
+  <p class="lf-page-subtitle">Every reported item and who has claimed it so far.</p>
+
+  @if (loading()) {
+    <div class="lf-loading">
+      <mat-spinner diameter="36" />
+    </div>
+  } @else if (rows().length === 0) {
+    <div class="lf-empty">
+      <mat-icon>inbox</mat-icon>
+      <p>No lost items reported yet.</p>
+    </div>
+  } @else {
+    <mat-accordion class="lf-report-accordion" multi>
+      @for (row of rows(); track row.lostItemId) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ row.itemName }}</mat-panel-title>
+            <mat-panel-description>
+              <span class="lf-report-place">
+                <mat-icon inline>location_on</mat-icon>
+                {{ row.place }}
+              </span>
+              <span class="lf-report-count-chip">
+                {{ claimedTotal(row) }} of {{ row.quantity }} claimed
+              </span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          @if (row.claimants.length === 0) {
+            <p class="lf-no-claimants">No claims yet.</p>
+          } @else {
+            <table class="lf-claimants-table">
+              <thead>
+                <tr>
+                  <th>Claimant</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (claimant of row.claimants; track claimant.userId) {
+                  <tr>
+                    <td>{{ claimant.name }}</td>
+                    <td>{{ claimant.quantity }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
+</div>
