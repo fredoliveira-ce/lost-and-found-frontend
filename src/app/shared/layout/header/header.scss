@@ -25,12 +25,6 @@
   color: var(--mat-sys-on-primary-fixed-variant);
 }
 
-.lf-brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-}
-
 .lf-brand-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
@@ -41,11 +35,6 @@
     font-style: normal;
     color: var(--mat-sys-primary);
   }
-}
-
-.lf-brand-subtitle {
-  font-size: 0.7rem;
-  color: var(--mat-sys-on-surface-variant);
 }
 
 .lf-nav {
@@ -63,6 +52,12 @@
   flex: 1 1 auto;
 }
 
+.lf-user-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .lf-user-button {
   display: flex;
   align-items: center;
@@ -71,6 +66,12 @@
 
 .lf-user-name {
   font-weight: 500;
+}
+
+// mat-button always renders a projected mat-icon before the label content,
+// regardless of source order — reorder it back to a trailing chevron.
+.lf-user-button > .mat-icon {
+  order: 1;
 }
 
 .lf-role-chip {

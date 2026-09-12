@@ -3,10 +3,7 @@
     <span class="lf-brand-icon">
       <mat-icon>search</mat-icon>
     </span>
-    <span class="lf-brand-text">
-      <span class="lf-brand-title">Lost <em>&amp; Found</em></span>
-      <span class="lf-brand-subtitle">Campus &amp; Office Bulletin</span>
-    </span>
+    <span class="lf-brand-title">Lost <em>&amp; Found</em></span>
   </a>
 
   @if (auth.isAuthenticated()) {
@@ -22,13 +19,15 @@
 
     <span class="lf-spacer"></span>
 
-    <button mat-button [matMenuTriggerFor]="userMenu" class="lf-user-button">
-      <span class="lf-user-name">{{ auth.username() }}</span>
+    <span class="lf-user-area">
       @if (auth.isAdmin()) {
         <mat-chip class="lf-role-chip">Staff Admin</mat-chip>
       }
-      <mat-icon>expand_more</mat-icon>
-    </button>
+      <button mat-button [matMenuTriggerFor]="userMenu" class="lf-user-button">
+        <span class="lf-user-name">{{ auth.username() }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+    </span>
     <mat-menu #userMenu="matMenu">
       <button mat-menu-item (click)="signOut()">
         <mat-icon>logout</mat-icon>
