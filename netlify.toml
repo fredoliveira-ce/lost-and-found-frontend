@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist/lost-and-found-frontend/browser"
+
+# Proxies /api/* to the backend server-side, so the browser only ever talks
+# to this Netlify origin - no backend CORS configuration needed.
+[[redirects]]
+  from = "/api/*"
+  to = "https://lost-and-found-c3sp.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# Angular Router handles paths like /browse and /admin/import client-side;
+# a hard refresh on those needs Netlify to still serve index.html rather
+# than 404, so the SPA can pick up routing itself.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
