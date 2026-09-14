@@ -10,8 +10,12 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    // wakeUpInterceptor is listed last so it sits closest to the actual
+    // network call - it needs to retry a cold-start failure itself before
+    // errorInterceptor (listed earlier, so further from the network call)
+    // ever sees it and shows a message.
     provideHttpClient(
-      withInterceptors([wakeUpInterceptor, authInterceptor, errorInterceptor]),
+      withInterceptors([authInterceptor, errorInterceptor, wakeUpInterceptor]),
     ),
   ],
 };

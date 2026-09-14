@@ -8,13 +8,18 @@ describe('wakeUpInterceptor', () => {
   let httpClient: HttpClient;
   let httpMock: HttpTestingController;
   let notifications: {
-    showWakingUp: ReturnType<typeof vi.fn>;
-    dismissWakingUp: ReturnType<typeof vi.fn>;
+    beginWakingUp: ReturnType<typeof vi.fn>;
+    updateWakingUp: ReturnType<typeof vi.fn>;
+    endWakingUp: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
     vi.useFakeTimers();
-    notifications = { showWakingUp: vi.fn(), dismissWakingUp: vi.fn() };
+    notifications = {
+      beginWakingUp: vi.fn(),
+      updateWakingUp: vi.fn(),
+      endWakingUp: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -32,33 +37,53 @@ describe('wakeUpInterceptor', () => {
     vi.useRealTimers();
   });
 
-  it('shows a waking-up message once a request has been pending past the threshold', () => {
-    httpClient.get('/api/lost-items').subscribe();
-    const req = httpMock.expectOne('/api/lost-items');
+  it('retries a network error (status 0) without surfacing it as an error', () => {
+    let result: unknown;
+    httpClient.get('/api/lost-items').subscribe((res) => (result = res));
 
-    vi.advanceTimersByTime(4000);
-    expect(notifications.showWakingUp).toHaveBeenCalledTimes(1);
+    httpMock.expectOne('/api/lost-items').error(new ProgressEvent('error'), { status: 0 });
+    expect(notifications.beginWakingUp).toHaveBeenCalledTimes(1);
+    expect(notifications.updateWakingUp).toHaveBeenCalledWith(1, 15);
 
-    req.flush({});
-    expect(notifications.dismissWakingUp).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(3000);
+    httpMock.expectOne('/api/lost-items').flush({ ok: true });
+
+    expect(result).toEqual({ ok: true });
+    expect(notifications.endWakingUp).toHaveBeenCalledTimes(1);
   });
 
-  it('does not show anything for requests that resolve before the threshold', () => {
+  it('retries a gateway timeout (502/503/504)', () => {
     httpClient.get('/api/lost-items').subscribe();
-    httpMock.expectOne('/api/lost-items').flush({});
 
-    vi.advanceTimersByTime(4000);
+    httpMock
+      .expectOne('/api/lost-items')
+      .flush(null, { status: 503, statusText: 'Service Unavailable' });
+    expect(notifications.updateWakingUp).toHaveBeenCalledWith(1, 15);
 
-    expect(notifications.showWakingUp).not.toHaveBeenCalled();
-    expect(notifications.dismissWakingUp).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(3000);
+    httpMock.expectOne('/api/lost-items').flush({ ok: true });
+
+    expect(notifications.endWakingUp).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not retry a real error from the backend, e.g. a 401 with a body', () => {
+    let error: unknown;
+    httpClient.get('/api/lost-items').subscribe({ error: (e) => (error = e) });
+
+    httpMock.expectOne('/api/lost-items').flush(
+      { type: 'UNAUTHORIZED', message: 'Missing or invalid authentication token.' },
+      { status: 401, statusText: 'Unauthorized' },
+    );
+
+    expect(error).toBeTruthy();
+    expect(notifications.beginWakingUp).not.toHaveBeenCalled();
+    expect(notifications.updateWakingUp).not.toHaveBeenCalled();
   });
 
   it('does not touch requests outside /api', () => {
     httpClient.get('/assets/logo.png').subscribe();
     httpMock.expectOne('/assets/logo.png').flush({});
 
-    vi.advanceTimersByTime(4000);
-
-    expect(notifications.showWakingUp).not.toHaveBeenCalled();
+    expect(notifications.beginWakingUp).not.toHaveBeenCalled();
   });
 });

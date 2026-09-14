@@ -23,20 +23,24 @@ export class NotificationService {
   }
 
   // Render's free tier spins the backend down after inactivity; a cold start
-  // can take up to a minute. Requests are counted rather than shown per-call,
-  // so several slow requests in flight at once still only show one message.
-  showWakingUp(): void {
+  // can take up to a minute, longer than the Netlify proxy will wait on a
+  // single attempt. beginWakingUp/endWakingUp bracket a request's whole
+  // retry sequence (so several requests retrying at once still net out to
+  // one message), while updateWakingUp refreshes the attempt counter shown.
+  beginWakingUp(): void {
     this.wakingUpPending++;
-    if (!this.wakingUpRef) {
-      this.wakingUpRef = this.snackBar.open(
-        "Waking up the server — this can take up to a minute on the first request.",
-        undefined,
-        { panelClass: 'lf-snackbar-info' },
-      );
-    }
   }
 
-  dismissWakingUp(): void {
+  updateWakingUp(attempt: number, maxAttempts: number): void {
+    this.wakingUpRef?.dismiss();
+    this.wakingUpRef = this.snackBar.open(
+      `Waking up the server — this can take a minute (retry ${attempt}/${maxAttempts})...`,
+      undefined,
+      { panelClass: 'lf-snackbar-info' },
+    );
+  }
+
+  endWakingUp(): void {
     this.wakingUpPending = Math.max(0, this.wakingUpPending - 1);
     if (this.wakingUpPending === 0 && this.wakingUpRef) {
       this.wakingUpRef.dismiss();
