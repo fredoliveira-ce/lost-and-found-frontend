@@ -33,11 +33,13 @@ export class NotificationService {
 
   updateWakingUp(attempt: number, maxAttempts: number): void {
     this.wakingUpRef?.dismiss();
-    this.wakingUpRef = this.snackBar.open(
-      `Waking up the server — this can take a minute (retry ${attempt}/${maxAttempts})...`,
-      undefined,
-      { panelClass: 'lf-snackbar-info' },
-    );
+    const message =
+      attempt === 0
+        ? 'Connecting — the server can take a minute to wake up...'
+        : `Waking up the server — this can take a minute (retry ${attempt}/${maxAttempts})...`;
+    this.wakingUpRef = this.snackBar.open(message, undefined, {
+      panelClass: 'lf-snackbar-info',
+    });
   }
 
   endWakingUp(): void {
